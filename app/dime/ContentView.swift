@@ -76,7 +76,21 @@ struct ContentView: View {
             }
 
             if firstLaunch {
-                showIntro = true
+                // [DEV]
+//                showIntro = true
+                let categories = SuggestedCategory.expenses.prefix(3) + SuggestedCategory.incomes.prefix(1)
+                for (i, category) in categories.enumerated() {
+                    let suggestedCategory = Category(context: dataController.container.viewContext)
+                    suggestedCategory.name = NSLocalizedString(category.name, comment: "category name")
+                    suggestedCategory.emoji = category.emoji
+                    suggestedCategory.dateCreated = Date.now
+                    suggestedCategory.id = UUID()
+                    suggestedCategory.colour = "1"
+                    suggestedCategory.order = Int64(i)
+                    suggestedCategory.income = category.income
+                    dataController.save()
+                }
+                
                 firstLaunch = false
                 showUpdateSheet = false
 
