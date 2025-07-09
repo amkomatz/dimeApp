@@ -17,6 +17,7 @@ struct ContentView: View {
     @AppStorage("notificationsEnabled", store: UserDefaults(suiteName: groupId)) var notificationsEnabled: Bool = true
 
     @AppStorage("firstLaunch", store: UserDefaults(suiteName: groupId)) var firstLaunch: Bool = true
+    @AppStorage("onboardingComplete", store: UserDefaults(suiteName: groupId)) var onboardingComplete: Bool = false
 
     // adds category orders
     @AppStorage("dataMigration1", store: UserDefaults(suiteName: groupId)) var dataMigration1: Bool = true
@@ -76,21 +77,8 @@ struct ContentView: View {
             }
 
             if firstLaunch {
-                // [DEV]
-//                showIntro = true
-                let categories = SuggestedCategory.expenses.prefix(3) + SuggestedCategory.incomes.prefix(1)
-                for (i, category) in categories.enumerated() {
-                    let suggestedCategory = Category(context: dataController.container.viewContext)
-                    suggestedCategory.name = NSLocalizedString(category.name, comment: "category name")
-                    suggestedCategory.emoji = category.emoji
-                    suggestedCategory.dateCreated = Date.now
-                    suggestedCategory.id = UUID()
-                    suggestedCategory.colour = "1"
-                    suggestedCategory.order = Int64(i)
-                    suggestedCategory.income = category.income
-                    dataController.save()
-                }
-                
+                showIntro = !onboardingComplete
+                onboardingComplete = true
                 firstLaunch = false
                 showUpdateSheet = false
 
